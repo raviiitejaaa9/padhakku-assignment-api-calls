@@ -1,9 +1,31 @@
+GET http://localhost:4000/api/users/
+
+###
+
 POST http://localhost:4000/api/signup
 Content-Type: application/json
 
 {
-    "username": "john_doe",
-    "email": "john@example.com"
+    "username": "Ravi Teja",
+    "email": "raviteja@example.com"
 }
+
+###
+
+POST http://localhost:4000/api/posts
+Content-Type: application/json
+
+{
+    "userId": 1,
+    "post": "Some Content"
+}
+
+###
+
+DELETE http://localhost:4000/api/deletepost/2
+
+### 
+
+GET http://localhost:4000/api/posts/1
 
 ###
