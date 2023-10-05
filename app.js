@@ -98,6 +98,12 @@ app.post("/api/signup",async(request,response) => {
                 message : "Invalid email format."
             })
         }
+        else if(username.length <= 0){
+            response.status(400).json({
+                status : 400,
+                message : "You should provide a non-empty username."
+            })
+        }
         else{    
             await db.run(userRegistrationQuery, [username,email]);
             response.status(200).json({
