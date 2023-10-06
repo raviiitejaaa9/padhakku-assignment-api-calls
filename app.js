@@ -40,13 +40,13 @@ const isValidEmail = (email) => {
 app.get("/api/users", async(request,response) => {
     const dbQuery = `
         SELECT *
-        FROM users LEFT JOIN user_posts ON users.userId = user_posts.userId
+        FROM users 
         ORDER BY userID ASC;
     `
     const postsQuery = `
-        SELECT *
+        SELECT userId, postId, content
         FROM user_posts
-        ORDER BY postID ASC; 
+        ORDER BY userId ASC; 
     `
     try{
         const usersDetails = await db.all(dbQuery);
@@ -123,10 +123,10 @@ app.post("/api/signup",async(request,response) => {
 
 // 3. Api call for posting 
 app.post("/api/posts", async(request,response) => {
-    const {userId, post} = request.body;
+    const {userId, content} = request.body;
     const postQuery = `
         INSERT INTO user_posts (
-            userId,post
+            userId,content
         )
         VALUES(
             ?,?
@@ -149,14 +149,14 @@ app.post("/api/posts", async(request,response) => {
                 message : "User ID not found."
             })
         }
-        else if (!post.length > 0){
+        else if (!content.length > 0){
             await response.status(400).json({
                 status : 400,
                 message : "Content cannot be empty."
             })
         }   
         else{
-            await db.run(postQuery, [userId, post]);
+            await db.run(postQuery, [userId, content]);
             await response.status(200).json({
                 status  :200,
                 message : "Successfully created."
@@ -221,7 +221,7 @@ app.get("/api/posts/:userId", async (request,response) => {
     const {userId} = request.params;
 
     const getUsersPostsQuery = `
-        SELECT postId, post as content
+        SELECT postId, content
         FROM user_posts
         WHERE userId = ?;
     `;
